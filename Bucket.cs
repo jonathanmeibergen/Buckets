@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Buckets
 {
-    internal class Bucket : Container
+    public class Bucket : Container
     {
         private int _capacity;
 

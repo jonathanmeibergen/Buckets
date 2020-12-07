@@ -6,14 +6,19 @@ using System.Threading.Tasks;
 
 namespace Buckets
 {
-    internal abstract class Container
+    public abstract class Container
     {
-        //https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/how-to-declare-and-use-read-write-properties
         private int _content;
-        public int Content { get; set; }
+
+        public int Content { 
+            get => _content; 
+            set { 
+                _content = value < Capacity ? value : Capacity; 
+            } 
+        }
         public abstract int Capacity { get; set; }
 
-        public event EventHandler Overflowing = delegate { };
+        public event EventHandler<int> Overflowing = delegate { };
 
         public event EventHandler Overflowed = delegate { };
 
@@ -22,8 +27,8 @@ namespace Buckets
         public Container(int capacity)
         {
             Capacity = capacity;
-            Overflowing += (a, b) => Console.WriteLine($"{a.ToString()} is overflowing");
-            Overflowed += (a, b) => Console.WriteLine($"{a.ToString()} has overflowed");
+            Overflowing += (a, b) => Console.WriteLine($"{a.ToString()} {a.GetHashCode().ToString()} is overflowing");
+            Overflowed += (a, b) => Console.WriteLine($"{a.ToString()} {a.GetHashCode().ToString()} has overflowed");
         }
 
         public void Fill(int amount)
@@ -32,8 +37,8 @@ namespace Buckets
             if(amount > vacuity)
             {
                 Content += vacuity;
-                Overflowing.Invoke(this, EventArgs.Empty);
                 int overflow = amount - vacuity;
+                Overflowing.Invoke(this, overflow);
                 Content += overflow;
                 Overflowed.Invoke(this, EventArgs.Empty);
             } else
