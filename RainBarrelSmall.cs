@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Buckets.Main
 {
-    public class RainBarrelSmall : Container
+    public class RainBarrelSmall : Bucket
     {
         private int _capacity;
 
         public RainBarrelSmall() : base(capacity: 80)
         {}
 
-        public override int Capacity { 
-            get => _capacity; 
-            set { }
+        public override int Capacity {
+            get => _capacity;
+            set => throw new NotSupportedException("Capacity can not be set on RainBarrelSmall");
         }
     }
 }
